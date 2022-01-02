@@ -7,25 +7,59 @@
         <title>Promise</title>
     </head>
     <body>
+        <table>
+            <tbody>
+                <tr>
+                    <td>ID :</td>
+                    <td id="id"></td>
+                </tr>
+                <tr>
+                    <td>Name :</td>
+                    <td id="name"></td>
+                </tr>
+                <tr>
+                    <td>Price :</td>
+                    <td id="price"></td>
+                </tr>
+            </tbody>
+        </table>
         <script>
             // ada 3 state di promise
             // 1. pending = ketika pertamakali request
             // 2. fullfield = ketika request berhasil
             // 3. rejected = ketika request gagal
-            const promise = new Promise(function (resolve, reject) {
-                const ajax = new XMLHttpRequest();
-                ajax.open("GET", "api/product.json");
-                ajax.onload = function () {
-                    if (ajax.status == 200) {
-                        resolve(ajax.responseText);
-                    } else {
-                        reject(`Error with response : ${ajax.responseText}`);
-                    }
-                };
-                ajax.send();
-            });
+            function getProduct() {
+                return new Promise(function (resolve, reject) {
+                    const ajax = new XMLHttpRequest();
+                    ajax.open("GET", "api/products.json");
+                    ajax.onload = function () {
+                        if (ajax.status == 200) {
+                            resolve(ajax.responseText);
+                        } else {
+                            reject(`Error with response : ${ajax.status}`);
+                        }
+                    };
+                    ajax.send();
+                });
+            }
 
-            console.log(promise);
+            getProduct()
+                .then(function (response) {
+                    return JSON.parse(response);
+                })
+                .then(function (json) {
+                    document.getElementById("id").textContent = json.id;
+                    document.getElementById("name").textContent = json.name;
+                    document.getElementById("price").textContent = json.price;
+                })
+                .catch(function (error) {
+                    document.getElementById("id").textContent = error;
+                    document.getElementById("name").textContent = error;
+                    document.getElementById("price").textContent = error;
+                })
+                .finally(function () {
+                    console.log("Finally");
+                });
         </script>
     </body>
 </html>
