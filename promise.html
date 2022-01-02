@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Promise</title>
+    </head>
+    <body>
+        <script>
+            // ada 3 state di promise
+            // 1. pending = ketika pertamakali request
+            // 2. fullfield = ketika request berhasil
+            // 3. rejected = ketika request gagal
+            const promise = new Promise(function (resolve, reject) {
+                const ajax = new XMLHttpRequest();
+                ajax.open("GET", "api/product.json");
+                ajax.onload = function () {
+                    if (ajax.status == 200) {
+                        resolve(ajax.responseText);
+                    } else {
+                        reject(`Error with response : ${ajax.responseText}`);
+                    }
+                };
+                ajax.send();
+            });
+
+            console.log(promise);
+        </script>
+    </body>
+</html>
